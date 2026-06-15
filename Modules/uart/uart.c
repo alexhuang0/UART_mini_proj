@@ -104,6 +104,7 @@ void uart_init() {
 
     // 4. Set Baud Rate
 	// usart: data sheet p824, baud rate p787
+	// LL_RCC_GetAPB1Prescaler() and get SysClock for APB1 clock speed
 
     // Hint: Write your calculated hex value directly to USART2->BRR
 
