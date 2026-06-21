@@ -97,14 +97,17 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  printf("Initialized UART\r\n");
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  char c = UART2_ReadChar();
+	  UART2_SendChar(c);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
 
 /**
   * @brief System Clock Configuration
