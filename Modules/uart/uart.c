@@ -60,9 +60,19 @@ void uart_init() {
 
     // 5. Control Registers (CR1)
 
-	USART2->CR1 &= ~(USART_CR1_UE_Msk | USART_CR1_TE_Msk | USART_CR1_RE_Msk);
+	USART2->CR1 &= ~(USART_CR1_UE_Msk | USART_CR1_TE_Msk | USART_CR1_RE_Msk | USART_CR1_RXNEIE_Msk);
 	USART2->CR1 |= 1 << USART_CR1_UE_Pos;
 	USART2->CR1 |= ((1 << USART_CR1_TE_Pos) | (1 << USART_CR1_RE_Pos));
+
+
+	// 6. enable NVIC USART2 interrupt handler
+
+	// enable on the ARM core
+	NVIC_SetPriority(USART2_IRQn, 0);
+	NVIC_EnableIRQ(USART2_IRQn);
+
+	// enable on UART
+	USART2->CR1 |= USART_CR1_RXNEIE_Msk;
 }
 
 // CPU -> Transmit DR -> Transmit Shift Register -> TX Wire (to port)
@@ -92,6 +102,24 @@ char UART2_ReadChar() {
 	while(!(USART2->SR & USART_SR_RXNE_Msk));
 
 	return USART2->DR;
+}
+
+// Interrupt handler (Read char alternative)
+static uint16_t rx_get_idx;
+static uint16_t rx_put_idx;
+
+void USART2_IRQHandler() {
+	if (USART2->SR & USART_SR_ORE_Msk) {
+			// seq to clear Overrun Error
+			(void)USART2->SR;
+			(void)USART2->DR;
+	//		printf("\nData lost due to ORE\n");
+			return;
+	}
+
+	while(!(USART2->SR & USART_SR_RXNE_Msk));
+
+
 }
 
 // overwrite weak functions required for printf
