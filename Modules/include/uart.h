@@ -18,10 +18,13 @@
 
 
 #define BAUD_RATE 115200
+#define UART_RX_BUF_SIZE 64
+#define UART_TX_BUF_SIZE 1024
 
-void uart_init();
+void uart_init(void);
 void UART2_SendChar(char c);
-char UART2_ReadChar();
-
+char UART2_ReadChar(void);
+int UART_Has_RxBuffer_New_Data(void);
+char UART_Get_Buffered_Char(void);
 
 #endif /* UART_UART_H_ */

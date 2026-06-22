@@ -101,8 +101,16 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  char c = UART2_ReadChar();
-	  UART2_SendChar(c);
+//	  char c = UART2_ReadChar();
+//	  UART2_SendChar(c);
+
+
+	  if (UART_Has_RxBuffer_New_Data()) {
+		  char user_input_char = UART_Get_Buffered_Char();
+		  UART2_SendChar(user_input_char);
+	  }
+
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
