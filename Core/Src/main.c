@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "uart.h"
+#include "led.h";
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,6 +94,7 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   uart_init();
+  led_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,6 +109,9 @@ int main(void)
 
 	  if (UART_Has_RxBuffer_New_Data()) {
 		  char user_input_char = UART_Get_Buffered_Char();
+		  if (user_input_char == 'e') {
+			  LED_Toggle();
+		  }
 		  UART2_SendChar(user_input_char);
 	  }
 
