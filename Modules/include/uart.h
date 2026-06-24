@@ -21,6 +21,8 @@
 #define UART_RX_BUF_SIZE 64
 #define UART_TX_BUF_SIZE 1024
 
+extern volatile uint16_t software_char_drop_ctr;
+
 void uart_init(void);
 void UART2_SendChar(char c);
 char UART2_ReadChar(void);

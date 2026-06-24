@@ -109,6 +109,8 @@ static volatile uint16_t rx_put_idx = 0; // head
 static volatile uint16_t rx_get_idx = 0; // tail
 static char rx_buf[UART_RX_BUF_SIZE];
 
+volatile uint16_t software_char_drop_ctr = 0;
+
 void USART2_IRQHandler(void) {
 	if (USART2->SR & USART_SR_ORE_Msk) {
 			// seq to clear Overrun Error
@@ -131,6 +133,8 @@ void USART2_IRQHandler(void) {
 			rx_buf[rx_put_idx] = received;
 			rx_put_idx = next_put_idx;
 		} else {
+			++software_char_drop_ctr;
+
 			// dont write ORE into USART2->SR
 			// it is a read only hardware register
 		}

@@ -109,10 +109,17 @@ int main(void)
 
 	  if (UART_Has_RxBuffer_New_Data()) {
 		  char user_input_char = UART_Get_Buffered_Char();
-		  if (user_input_char == 'e') {
-			  LED_Toggle();
-		  }
+//		  if (user_input_char == 'e') {
+//			  LED_Toggle();
+//		  }
 		  UART2_SendChar(user_input_char);
+
+
+//		  for(volatile int i = 0; i < 40000; i++);
+	  }
+
+	  if (software_char_drop_ctr > 0) {
+		  printf("\r\n[WARNING] Total characters dropped: %lu\r\n", software_char_drop_ctr);
 	  }
 
 
