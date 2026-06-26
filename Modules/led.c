@@ -5,8 +5,8 @@
  *      Author: Alex
  */
 
-#include "led.h";
-#include "stm32f4xx_ll_rcc.h"
+#include "led.h"
+#include "stm32f4xx.h"
 
 void led_init(void) {
 	// enable GPIO clock
