@@ -23,7 +23,8 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "uart.h"
-#include "led.h";
+#include "led.h"
+#include "btn.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,6 +96,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   uart_init();
   led_init();
+  btn_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

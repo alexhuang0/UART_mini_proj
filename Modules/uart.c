@@ -68,7 +68,7 @@ void uart_init(void) {
 	// 6. enable NVIC USART2 interrupt handler
 
 	// enable on the ARM core
-	NVIC_SetPriority(USART2_IRQn, 0);
+	NVIC_SetPriority(USART2_IRQn, 1);
 	NVIC_EnableIRQ(USART2_IRQn);
 
 	// enable on UART
