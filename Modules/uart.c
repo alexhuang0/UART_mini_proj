@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 // baud stuff
-#include "stm32f4xx_ll_rcc.h"
+#include "stm32f4xx.h"
 
 void uart_init(void) {
 //	UART_DBG("Init UART\n");
