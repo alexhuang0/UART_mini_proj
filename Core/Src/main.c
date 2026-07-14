@@ -122,10 +122,10 @@ int main(void)
 //		  for(volatile int i = 0; i < 40000; i++);
 	  }
 
-	  if (TIM2->SR & TIM_SR_UIF) {
-		  TIM2->SR &= ~TIM_SR_UIF;
-		  LED_Toggle();
-	  }
+//	  if (TIM2->SR & TIM_SR_UIF) {
+//		  TIM2->SR &= ~TIM_SR_UIF;
+//		  LED_Toggle();
+//	  }
 
 	  if (software_char_drop_ctr > 0) {
 		  printf("\r\n[WARNING] Total characters dropped: %lu\r\n", software_char_drop_ctr);
