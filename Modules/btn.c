@@ -40,10 +40,16 @@ void btn_init(void) {
 void EXTI15_10_IRQHandler(void) {
 	EXTI->PR = 1 << EXTI_PR_PR13_Pos;
 
-	if (GPIOC->IDR == 0) {
-		GPIOA->BSRR = GPIO_ODR_OD5;
+	if ((GPIOC->IDR & GPIO_IDR_ID13) == 0) {
+		// PC13	is LOW (aka PRESSED)
+		// turn LED ON
+		// BS "set"
+		GPIOA->BSRR = GPIO_BSRR_BS5;
 	} else {
-		GPIOA->ODR = ~GPIO_ODR_OD5;
+		// button is released
+		// turn LED OFF
+		// BS "re-set", forces ODR5 to be 0
+		GPIOA->BSRR = GPIO_BSRR_BR5;
 	}
 //	LED_Toggle();
 }
