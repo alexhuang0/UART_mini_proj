@@ -20,4 +20,23 @@ void tmr_init(void) {
 
 	// better to enable timer after setting parameters
 	TIM2->CR1 |= TIM_CR1_CEN;
+
+
+}
+
+void setup_interrupt(void) {
+	// use TIM2_CH4 (PA3 from datasheet)
+
+	// enable GPIOC
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+
+	// set PA3 to AF mode
+	GPIOA->MODER &= ~GPIO_MODER_MODE3;
+	GPIOA->MODER |= 2 << GPIO_MODER_MODE3_Pos;
+
+	GPIOA->AFR &= ~GPIO_AFR_AFRL3;
+	// set PA3's AF mode to AF1 (TIM2_CH4)
+	GPIOA->AFR |= 1 << GPIO_AFR_AFRL3_Pos;
+
+
 }
