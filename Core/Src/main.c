@@ -25,6 +25,7 @@
 #include "uart.h"
 #include "led.h"
 #include "btn.h"
+#include "tmr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,11 +98,13 @@ int main(void)
   uart_init();
   led_init();
   btn_init();
+  tmr_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   printf("Initialized UART\r\n");
+//  GPIOA->ODR = ~GPIO_ODR_OD5;
   while (1)
   {
     /* USER CODE END WHILE */
@@ -116,8 +119,12 @@ int main(void)
 //		  }
 		  UART2_SendChar(user_input_char);
 
-
 //		  for(volatile int i = 0; i < 40000; i++);
+	  }
+
+	  if (TIM2->SR & TIM_SR_UIF) {
+		  TIM2->SR &= ~TIM_SR_UIF;
+		  LED_Toggle();
 	  }
 
 	  if (software_char_drop_ctr > 0) {

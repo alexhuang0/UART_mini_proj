@@ -9,6 +9,7 @@
 #define UART_UART_H_
 
 #include "stm32f446xx.h"
+#include "stm32f4xx_ll_rcc.h"
 
 #define UART_DBG(fmt, ...)
 #ifdef DEBUG
