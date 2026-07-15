@@ -7,6 +7,9 @@
 
 #include "stm32f4xx.h"
 #include "led.h"
+#include "tmr.h"
+
+void setup_gpio_pin(void);
 
 void tmr_init(void) {
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
@@ -25,7 +28,7 @@ void tmr_init(void) {
 	NVIC_EnableIRQ(TIM2_IRQn);
 
 	// better to enable timer after setting parameters
-//	TIM2->CR1 |= TIM_CR1_CEN;
+	TIM2->CR1 |= TIM_CR1_CEN;
 }
 
 void TIM2_IRQHandler(void) {
@@ -37,19 +40,47 @@ void TIM2_IRQHandler(void) {
 	}
 }
 
-void setup_interrupt(void) {
-	// use TIM2_CH4 (PA3 from datasheet)
+void tmr_init_PWM(void) {
+	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 
-	// enable GPIOC
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+	// APB1 Timer Clock Freq / Desired Tim Freq = Prescaler * ARR
+	// for 0.5s period (2Hz)
+	TIM2->PSC = 4200 - 1;
+	TIM2->ARR = 2*(10000) - 1; // datasheet says this is 32 bits
+	// double ARR to get CCRx register to have DUTY CYCLE of 0.5s
+
+
+	// PWM STUFF (enabled bits based on ref manual)
+	// Duty Cycle = CCR4 / ARR
+	TIM2->CCR3 = 10000 - 1;
+
+	TIM2->CCER |= TIM_CCER_CC3E;
+
+	TIM2->CR1 |= TIM_CR1_ARPE;
+
+	TIM2->CCMR2 &= ~TIM_CCMR2_OC3M_Msk;
+	TIM2->CCMR2 |= 0b110 << TIM_CCMR2_OC3M_Pos;
+	TIM2->CCMR2 |= TIM_CCMR2_OC3PE;
+
+	// due to PWM having shadow register / buffering, enable Update Generation bit
+	TIM2->EGR |= TIM_EGR_UG;
+	// better to enable timer after setting parameters
+	TIM2->CR1 |= TIM_CR1_CEN;
+
+	setup_gpio_pin();
+}
+
+void setup_gpio_pin(void) {
+	// use TIM2_CH4 (PB2 from datasheet)
+
+	// enable GPIOB
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
 
 	// set PA3 to AF mode
-	GPIOA->MODER &= ~GPIO_MODER_MODE3;
-	GPIOA->MODER |= 2 << GPIO_MODER_MODE3_Pos;
+	GPIOB->MODER &= ~GPIO_MODER_MODE10;
+	GPIOB->MODER |= 2 << GPIO_MODER_MODE10_Pos;
 
-	GPIOA->AFR[0] &= ~GPIO_AFRL_AFSEL3;
+	GPIOB->AFR[1] &= ~GPIO_AFRH_AFRH2;
 	// set PA3's AF mode to AF1 (TIM2_CH4)
-	GPIOA->AFR[0] |= 1 << GPIO_AFRL_AFSEL3_Pos;
-
-
+	GPIOB->AFR[1] |= GPIO_AFRH_AFRH2_0;
 }

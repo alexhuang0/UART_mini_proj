@@ -99,6 +99,7 @@ int main(void)
   led_init();
   btn_init();
   tmr_init();
+  tmr_init_PWM();
   /* USER CODE END 2 */
 
   /* Infinite loop */
